@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>لوحة المهام اليومية الاحترافية</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-1: #f6f8fb;
+            --bg-2: #eef3f8;
+            --card: rgba(255, 255, 255, 0.86);
+            --card-solid: #ffffff;
+            --text: #172033;
+            --muted: #6b7a90;
+            --line: rgba(28, 55, 90, 0.10);
+
+            --primary: #245d86;
+            --primary-2: #1f87b8;
+            --primary-soft: #eaf5fb;
+
+            --gold: #e9b35f;
+            --gold-soft: #fff5df;
+
+            --red: #b42318;
+            --red-soft: #fff0f0;
+
+            --green: #067647;
+            --green-soft: #e8f8ef;
+
+            --orange: #b54708;
+            --orange-soft: #fff3e6;
+
+            --purple: #6b4eff;
+            --purple-soft: #f0edff;
+
+            --shadow: 0 24px 70px rgba(23, 32, 51, 0.12);
+            --shadow-soft: 0 12px 30px rgba(23, 32, 51, 0.08);
+            --radius-xl: 32px;
+            --radius-lg: 24px;
+            --radius-md: 18px;
+            --radius-pill: 999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top right, rgba(31,135,184,0.20), transparent 30%),
+                radial-gradient(circle at 15% 20%, rgba(233,179,95,0.20), transparent 25%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app-shell {
+            width: min(1760px, calc(100% - 28px));
+            margin: 14px auto;
+            display: grid;
+            grid-template-columns: 310px minmax(0, 1fr);
+            gap: 18px;
+            min-height: calc(100vh - 28px);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 14px;
+            height: calc(100vh - 28px);
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: var(--shadow);
+            border-radius: var(--radius-xl);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow: hidden;
+        }
+
+        .brand-card {
+            position: relative;
+            border-radius: 28px;
+            padding: 20px;
+            background:
+                linear-gradient(145deg, rgba(36,93,134,0.97), rgba(31,135,184,0.95)),
+                radial-gradient(circle at top left, rgba(255,255,255,0.26), transparent 30%);
+            color: white;
+            overflow: hidden;
+            box-shadow: 0 18px 38px rgba(36,93,134,0.25);
+        }
+
+        .brand-card::before {
+            content: "";
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            left: -58px;
+            top: -68px;
+        }
+
+        .brand-card::after {
+            content: "";
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: rgba(233,179,95,0.25);
+            right: -42px;
+            bottom: -42px;
+        }
+
+        .brand-icon {
+            position: relative;
+            width: 58px;
+            height: 58px;
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.16);
+            border: 1px solid rgba(255,255,255,0.20);
+            font-size: 25px;
+            margin-bottom: 14px;
+            z-index: 1;
+        }
+
+        .brand-title {
+            position: relative;
+            z-index: 1;
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            position: relative;
+            z-index: 1;
+            margin-top: 8px;
+            color: rgba(255,255,255,0.84);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .quick-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .mini-stat {
+            background: rgba(255,255,255,0.78);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .mini-stat .num {
+            font-size: 23px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .mini-stat .label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+            font-weight: 700;
+        }
+
+        .nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            padding-inline-end: 4px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 18px;
+            font-weight: 800;
+            transition: 0.22s ease;
+            text-align: right;
+        }
+
+        .nav-btn i {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            transition: 0.22s ease;
+        }
+
+        .nav-btn small {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #ffffff;
+            border-color: rgba(31,135,184,0.14);
+            box-shadow: var(--shadow-soft);
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.active i {
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.65);
+            border: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .main-area {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 14px;
+            z-index: 20;
+            background: rgba(255,255,255,0.78);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.80);
+            box-shadow: var(--shadow-soft);
+            border-radius: var(--radius-xl);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 18px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 900;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f7fafd;
+            border: 1px solid var(--line);
+            color: var(--muted);
+            padding: 9px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 13px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--orange-soft);
+            color: var(--orange);
+            border: 1px solid rgba(181,71,8,0.15);
+            padding: 9px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 13px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .mode-badge.edit {
+            background: var(--green-soft);
+            color: var(--green);
+            border-color: rgba(6,118,71,0.15);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeUp 0.28s ease both;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 38px;
+            padding: 28px;
+            min-height: 245px;
+            background:
+                linear-gradient(135deg, rgba(23,32,51,0.94), rgba(36,93,134,0.94)),
+                radial-gradient(circle at 10% 5%, rgba(233,179,95,0.40), transparent 25%),
+                radial-gradient(circle at 85% 80%, rgba(31,135,184,0.34), transparent 28%);
+            box-shadow: var(--shadow);
+            color: white;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 42px 42px;
+            opacity: 0.18;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 920px;
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.92);
+            padding: 8px 13px;
+            border-radius: var(--radius-pill);
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 58px);
+            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            margin-top: 13px;
+            color: rgba(255,255,255,0.76);
+            font-size: 16px;
+            line-height: 1.9;
+            max-width: 760px;
+        }
+
+        .hero-actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 14px;
+            font-weight: 900;
+            min-height: 44px;
+            transition: 0.22s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: white;
+            box-shadow: 0 12px 24px rgba(36,93,134,0.20);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f2c36f, #de9e3a);
+            color: #3d2605;
+            box-shadow: 0 12px 24px rgba(233,179,95,0.22);
+        }
+
+        .btn-white {
+            background: rgba(255,255,255,0.92);
+            color: var(--primary);
+            border: 1px solid rgba(255,255,255,0.42);
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+        }
+
+        .btn-soft {
+            background: #ffffff;
+            color: var(--text);
+            border: 1px solid var(--line);
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn:disabled,
+        input:disabled,
+        select:disabled,
+        textarea:disabled {
+            opacity: 0.58;
+            cursor: not-allowed;
+        }
+
+        .grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .home-cards {
+            margin-top: 18px;
+        }
+
+        .action-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 190px;
+            border-radius: var(--radius-xl);
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(255,255,255,0.85);
+            box-shadow: var(--shadow-soft);
+            padding: 22px;
+            transition: 0.22s ease;
+        }
+
+        .action-card::before {
+            content: "";
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            left: -60px;
+            top: -60px;
+            background: var(--primary-soft);
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .action-card-icon {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            border-radius: 22px;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            font-size: 24px;
+            box-shadow: 0 12px 28px rgba(36,93,134,0.18);
+        }
+
+        .action-card h3 {
+            position: relative;
+            margin-top: 16px;
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .action-card p {
+            position: relative;
+            margin-top: 8px;
+            color: var(--muted);
+            line-height: 1.7;
+            font-weight: 600;
+        }
+
+        .action-card .btn {
+            position: relative;
+            margin-top: 16px;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.84);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.86);
+            box-shadow: var(--shadow-soft);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .section-desc {
+            margin-top: 6px;
+            color: var(--muted);
+            font-weight: 600;
+            line-height: 1.7;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 16px;
+            min-height: 116px;
+            box-shadow: 0 10px 20px rgba(23,32,51,0.05);
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            left: -38px;
+            bottom: -42px;
+            background: var(--primary-soft);
+        }
+
+        .stat-card .icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            line-height: 1;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .task-form {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: minmax(260px, 1fr) 170px 160px 140px auto;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .problem-form {
+            grid-template-columns: minmax(260px, 1fr) auto;
+        }
+
+        .task-input,
+        .priority-select,
+        .schedule-input,
+        .note-textarea {
+            width: 100%;
+            border: 1px solid rgba(36,93,134,0.16);
+            background: #fbfdff;
+            color: var(--text);
+            border-radius: 18px;
+            outline: none;
+            transition: 0.2s ease;
+            font-weight: 700;
+        }
+
+        .task-input,
+        .priority-select,
+        .schedule-input {
+            min-height: 48px;
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        .task-input:focus,
+        .priority-select:focus,
+        .schedule-input:focus,
+        .note-textarea:focus {
+            border-color: rgba(31,135,184,0.65);
+            box-shadow: 0 0 0 4px rgba(31,135,184,0.10);
+            background: #ffffff;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            border: 1px solid var(--line);
+            background: #ffffff;
+            color: var(--text);
+            padding: 9px 14px;
+            border-radius: var(--radius-pill);
+            font-weight: 900;
+            transition: 0.2s ease;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: white;
+            border-color: transparent;
+        }
+
+        .tasks-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 610px;
+            overflow-y: auto;
+            padding-inline-end: 5px;
+        }
+
+        .task-item {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 10px 18px rgba(23,32,51,0.05);
+            border-right: 7px solid var(--primary);
+        }
+
+        .task-item.completed {
+            opacity: 0.72;
+            background: #f8fafc;
+        }
+
+        .task-content {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .task-check {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--green);
+            flex: none;
+        }
+
+        .task-main {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-text {
+            font-size: 16px;
+            font-weight: 900;
+            word-break: break-word;
+        }
+
+        .completed .task-text {
+            color: #8a98a9;
+            text-decoration: line-through;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: var(--radius-pill);
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .priority-high {
+            border-right-color: #e55039;
+        }
+
+        .priority-medium {
+            border-right-color: #f39c12;
+        }
+
+        .priority-low {
+            border-right-color: #2ecc71;
+        }
+
+        .tag-high {
+            background: #ffe8e4;
+            color: #c0392b;
+        }
+
+        .tag-medium {
+            background: var(--orange-soft);
+            color: var(--orange);
+        }
+
+        .tag-low {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
+        .tag-date {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .status-overdue {
+            background: var(--red-soft);
+            color: var(--red);
+        }
+
+        .status-today {
+            background: var(--gold-soft);
+            color: #92600f;
+        }
+
+        .status-upcoming {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: none;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 15px;
+            border: 1px solid var(--line);
+            background: #ffffff;
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+            transition: 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-1px);
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .icon-btn.danger:hover {
+            color: var(--red);
+            background: var(--red-soft);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px 16px;
+            color: var(--muted);
+            background: #ffffff;
+            border: 1px dashed rgba(36,93,134,0.22);
+            border-radius: 24px;
+            font-weight: 800;
+        }
+
+        .note-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 330px;
+            gap: 18px;
+        }
+
+        .note-textarea {
+            min-height: 640px;
+            resize: vertical;
+            padding: 18px;
+            line-height: 1.9;
+            font-size: 15px;
+            background:
+                linear-gradient(#fffef7 29px, rgba(233,179,95,0.14) 30px),
+                #fffef7;
+            background-size: 100% 30px;
+        }
+
+        .side-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-box {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 10px 18px rgba(23,32,51,0.05);
+        }
+
+        .info-box h4 {
+            font-size: 16px;
+            font-weight: 900;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .problems-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 690px;
+            overflow-y: auto;
+            padding-inline-end: 5px;
+        }
+
+        .problem-row {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-right: 7px solid var(--red);
+            border-radius: 24px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 18px rgba(23,32,51,0.05);
+        }
+
+        .problem-row.solved {
+            opacity: 0.72;
+            border-right-color: var(--green);
+        }
+
+        .problem-row input {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--green);
+        }
+
+        .problem-text {
+            flex: 1;
+            min-width: 0;
+            font-weight: 900;
+            word-break: break-word;
+        }
+
+        .problem-text.solved {
+            text-decoration: line-through;
+            color: var(--muted);
+        }
+
+        .analytics-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 18px;
+        }
+
+        .progress-block {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .progress-item {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 15px;
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 9px;
+            font-weight: 900;
+        }
+
+        .bar {
+            height: 12px;
+            border-radius: var(--radius-pill);
+            background: #edf2f7;
+            overflow: hidden;
+        }
+
+        .bar span {
+            display: block;
+            height: 100%;
+            width: 0%;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            transition: width 0.25s ease;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .settings-card {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 10px 18px rgba(23,32,51,0.05);
+        }
+
+        .settings-card h3 {
+            font-size: 19px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .settings-card p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .settings-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            z-index: 9999;
+            background: #172033;
+            color: white;
+            border-radius: 18px;
+            padding: 13px 16px;
+            box-shadow: var(--shadow);
+            font-weight: 900;
+            transform: translateY(16px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.22s ease;
+            max-width: min(420px, calc(100% - 36px));
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: var(--green);
+        }
+
+        .toast.error {
+            background: var(--red);
+        }
+
+        .toast.warn {
+            background: var(--orange);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(23,32,51,0.35);
+            z-index: 80;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        @media (max-width: 1180px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 12px;
+                right: 12px;
+                bottom: 12px;
+                width: min(330px, calc(100vw - 24px));
+                height: auto;
+                z-index: 100;
+                transform: translateX(calc(100% + 24px));
+                transition: 0.24s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-btn {
+                display: grid;
+                place-items: center;
+            }
+
+            .topbar {
+                top: 12px;
+            }
+
+            .grid-4,
+            .stats-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .note-layout,
+            .analytics-layout,
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .app-shell {
+                width: min(100% - 18px, 1760px);
+                margin-top: 9px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .topbar-left,
+            .topbar-actions {
+                width: 100%;
+            }
+
+            .topbar-actions {
+                justify-content: flex-start;
+            }
+
+            .hero {
+                padding: 22px;
+                border-radius: 30px;
+            }
+
+            .grid-4,
+            .grid-3,
+            .grid-2,
+            .stats-row,
+            .home-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .input-group,
+            .problem-form {
+                grid-template-columns: 1fr;
+            }
+
+            .task-item,
+            .problem-row {
+                align-items: flex-start;
+            }
+
+            .task-item {
+                flex-direction: column;
+            }
+
+            .task-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .section-head {
+                flex-direction: column;
+            }
+
+            .note-textarea {
+                min-height: 460px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="overlay" class="overlay"></div>
+
+    <div class="app-shell">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="brand-card">
+                <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+                <div class="brand-title">لوحة المتابعة</div>
+                <div class="brand-subtitle">مهام، ملاحظات، شكاوي، وإحصائيات في شكل واحد خرافي وسهل.</div>
+            </div>
+
+            <div class="quick-status">
+                <div class="mini-stat">
+                    <div id="miniTotal" class="num">0</div>
+                    <div class="label">كل المهام</div>
+                </div>
+                <div class="mini-stat">
+                    <div id="miniDone" class="num">0</div>
+                    <div class="label">منجز</div>
+                </div>
+            </div>
+
+            <nav class="nav-list">
+                <button class="nav-btn active" data-page="home">
+                    <i class="fas fa-house"></i>
+                    <span>الرئيسية<small>نظرة عامة وأزرار سريعة</small></span>
+                </button>
+
+                <button class="nav-btn" data-page="tasks">
+                    <i class="fas fa-list-check"></i>
+                    <span>المهام اليومية<small>إضافة، تعديل، متابعة</small></span>
+                </button>
+
+                <button class="nav-btn" data-page="notes">
+                    <i class="fas fa-pen-nib"></i>
+                    <span>الملاحظات<small>دفتر ملاحظات سحابي</small></span>
+                </button>
+
+                <button class="nav-btn" data-page="problems">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span>الشكاوي والمشاكل<small>تسجيل وحل المشاكل</small></span>
+                </button>
+
+                <button class="nav-btn" data-page="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>الإحصائيات<small>تحليل سريع للتقدم</small></span>
+                </button>
+
+                <button class="nav-btn" data-page="settings">
+                    <i class="fas fa-gear"></i>
+                    <span>الإعدادات<small>قفل، فتح، تصدير</small></span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <i class="fas fa-cloud"></i>
+                <span>الحفظ متصل بـ Firebase</span>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="mobileMenuBtn" class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+                    <div>
+                        <div id="pageTitle" class="page-title">الرئيسية</div>
+                        <div id="currentDate" class="date-badge" style="margin-top:6px;">
+                            <i class="far fa-calendar-alt"></i>
+                            <span>...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+                    <span id="modeBadge" class="mode-badge">
+                        <i class="fas fa-lock"></i>
+                        وضع العرض فقط
+                    </span>
+                    <button id="unlockBtn" class="btn btn-primary"><i class="fas fa-unlock"></i> فتح التعديل</button>
+                    <button id="lockBtn" class="btn btn-soft"><i class="fas fa-lock"></i> قفل</button>
+                </div>
+            </header>
+
+            <!-- Home Page -->
+            <section id="page-home" class="page-section active">
+                <div class="hero">
+                    <div class="hero-content">
+                        <div class="hero-kicker"><i class="fas fa-sparkles"></i> لوحة احترافية بشكل عصري</div>
+                        <h1>نظّم يومك بسرعة، وادخل لكل قسم بزر واحد.</h1>
+                        <p>
+                            من هنا تقدر تدخل على المهام، الملاحظات، الشكاوي، الإحصائيات والإعدادات.
+                            الصفحة فيها قفل تعديل برقم سري، وحفظ مباشر على Firebase.
+                        </p>
+
+                        <div class="hero-actions">
+                            <button class="btn btn-gold go-page" data-page="tasks"><i class="fas fa-plus"></i> ابدأ بالمهام</button>
+                            <button class="btn btn-white go-page" data-page="notes"><i class="fas fa-note-sticky"></i> افتح الملاحظات</button>
+                            <button class="btn btn-white go-page" data-page="problems"><i class="fas fa-bug"></i> سجل مشكلة</button>
+                            <button class="btn btn-white go-page" data-page="analytics"><i class="fas fa-chart-pie"></i> شوف الإحصائيات</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-4 home-cards">
+                    <div class="action-card">
+                        <div class="action-card-icon"><i class="fas fa-list-check"></i></div>
+                        <h3>المهام اليومية</h3>
+                        <p>أضف مهامك ورتبها بالأولوية والموعد وشوف المتأخر والمنجز.</p>
+                        <button class="btn btn-primary go-page" data-page="tasks">دخول الصفحة</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-card-icon" style="background:linear-gradient(135deg,#de9e3a,#f2c36f);"><i class="fas fa-pen-nib"></i></div>
+                        <h3>الملاحظات</h3>
+                        <p>دفتر ملاحظات كبير للحفظ السحابي، مناسب للتقارير والأفكار اليومية.</p>
+                        <button class="btn btn-gold go-page" data-page="notes">دخول الصفحة</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-card-icon" style="background:linear-gradient(135deg,#b42318,#ef665c);"><i class="fas fa-triangle-exclamation"></i></div>
+                        <h3>الشكاوي</h3>
+                        <p>اكتب المشاكل والشكاوي وعلّم عليها كمحلولة أو احذفها.</p>
+                        <button class="btn btn-danger go-page" data-page="problems">دخول الصفحة</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-card-icon" style="background:linear-gradient(135deg,#067647,#22c55e);"><i class="fas fa-chart-line"></i></div>
+                        <h3>الإحصائيات</h3>
+                        <p>نسبة الإنجاز، المتأخر، القادم، وعدد المشاكل المفتوحة.</p>
+                        <button class="btn btn-green go-page" data-page="analytics">دخول الصفحة</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tasks Page -->
+            <section id="page-tasks" class="page-section">
+                <div class="glass-card">
+                    <div class="section-head">
+                        <div>
+                            <div class="section-title"><i class="fas fa-list-check"></i> المهام اليومية</div>
+                            <p class="section-desc">أضف مهمة جديدة، حدد الأولوية والموعد، وتابع الإنجاز والمتأخر.</p>
+                        </div>
+                        <button class="btn btn-soft go-page" data-page="home"><i class="fas fa-arrow-right"></i> رجوع للرئيسية</button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-layer-group"></i></div>
+                            <div id="totalCount" class="stat-number">0</div>
+                            <div class="stat-label">المجموع</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-circle-check"></i></div>
+                            <div id="completedCount" class="stat-number">0</div>
+                            <div class="stat-label">منجز</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-hourglass-half"></i></div>
+                            <div id="pendingCount" class="stat-number">0</div>
+                            <div class="stat-label">متبق</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-clock"></i></div>
+                            <div id="overdueCount" class="stat-number">0</div>
+                            <div class="stat-label">متأخرة</div>
+                        </div>
+                    </div>
+
+                    <div class="task-form">
+                        <div class="input-group">
+                            <input type="text" id="taskTitle" class="task-input" placeholder="اكتب مهمة جديدة..." />
+                            <select id="taskPriority" class="priority-select">
+                                <option value="عالية">🔴 عالية</option>
+                                <option value="متوسطة" selected>🟠 متوسطة</option>
+                                <option value="منخفضة">🟢 منخفضة</option>
+                            </select>
+                            <input type="date" id="taskDate" class="schedule-input" />
+                            <input type="time" id="taskTime" class="schedule-input" value="09:00" />
+                            <button id="addTaskBtn" class="btn btn-primary"><i class="fas fa-plus"></i> أضف</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <button class="filter-btn active" data-filter="all">الكل</button>
+                        <button class="filter-btn" data-filter="pending">غير مكتملة</button>
+                        <button class="filter-btn" data-filter="completed">مكتملة</button>
+                        <button class="filter-btn" data-filter="today">اليوم</button>
+                        <button class="filter-btn" data-filter="upcoming">القادمة</button>
+                        <button class="filter-btn" data-filter="overdue">المتأخرة</button>
+                    </div>
+
+                    <ul id="tasksList" class="tasks-list">
+                        <li class="empty-message"><i class="fas fa-spinner fa-pulse"></i> جاري التحميل...</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Notes Page -->
+            <section id="page-notes" class="page-section">
+                <div class="glass-card">
+                    <div class="section-head">
+                        <div>
+                            <div class="section-title"><i class="fas fa-pen-nib"></i> الملاحظات</div>
+                            <p class="section-desc">اكتب ملاحظاتك اليومية، التقارير، الأخطاء، أو أفكار التطوير واحفظها في السحابة.</p>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button id="saveNotesBtnTop" class="btn btn-gold"><i class="fas fa-save"></i> حفظ</button>
+                            <button class="btn btn-soft go-page" data-page="home"><i class="fas fa-arrow-right"></i> رجوع</button>
+                        </div>
+                    </div>
+
+                    <div class="note-layout">
+                        <div>
+                            <textarea id="notesContent" class="note-textarea" rows="24" placeholder="📝 دوّن هنا ملاحظاتك بالتفصيل..."></textarea>
+                            <div style="display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-top:12px;">
+                                <button id="saveNotesBtn" class="btn btn-gold"><i class="fas fa-save"></i> حفظ الملاحظات</button>
+                                <div id="notesMsg" style="font-size:13px; color:#b87333; font-weight:900;"></div>
+                            </div>
+                        </div>
+
+                        <aside class="side-info">
+                            <div class="info-box">
+                                <h4><i class="fas fa-lightbulb"></i> استخدام سريع</h4>
+                                <p>افتح التعديل بالرقم السري، اكتب ملاحظاتك، ثم اضغط حفظ. تقدر تحفظ بسرعة من زر Ctrl + S.</p>
+                            </div>
+
+                            <div class="info-box">
+                                <h4><i class="fas fa-cloud-arrow-up"></i> حفظ سحابي</h4>
+                                <p>الملاحظات محفوظة في Firestore داخل document باسم userNotes/mainNote.</p>
+                            </div>
+
+                            <div class="info-box">
+                                <h4><i class="fas fa-shield-halved"></i> حماية</h4>
+                                <p>وضع العرض يمنع التعديل على الملاحظات والمهام والشكاوي لحد ما تفتح التعديل بالـ PIN.</p>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Problems Page -->
+            <section id="page-problems" class="page-section">
+                <div class="glass-card">
+                    <div class="section-head">
+                        <div>
+                            <div class="section-title"><i class="fas fa-triangle-exclamation"></i> الشكاوي والمشاكل</div>
+                            <p class="section-desc">سجل أي مشكلة، وبعد الحل علم عليها كمحلولة أو احذفها من القائمة.</p>
+                        </div>
+                        <button class="btn btn-soft go-page" data-page="home"><i class="fas fa-arrow-right"></i> رجوع للرئيسية</button>
+                    </div>
+
+                    <div class="task-form" style="background:#fffafa;">
+                        <div class="input-group problem-form">
+                            <input type="text" id="problemInput" class="task-input" placeholder="اكتب الشكوى أو المشكلة..." />
+                            <button id="addProblemBtn" class="btn btn-danger"><i class="fas fa-plus"></i> إضافة</button>
+                        </div>
+                    </div>
+
+                    <ul id="problemsList" class="problems-list">
+                        <li class="empty-message"><i class="fas fa-spinner fa-pulse"></i> جاري التحميل...</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Analytics Page -->
+            <section id="page-analytics" class="page-section">
+                <div class="glass-card">
+                    <div class="section-head">
+                        <div>
+                            <div class="section-title"><i class="fas fa-chart-line"></i> الإحصائيات</div>
+                            <p class="section-desc">ملخص سريع لحالة اليوم ونسبة الإنجاز والمشاكل المفتوحة.</p>
+                        </div>
+                        <button class="btn btn-soft go-page" data-page="home"><i class="fas fa-arrow-right"></i> رجوع للرئيسية</button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-percent"></i></div>
+                            <div id="progressPercent" class="stat-number">0%</div>
+                            <div class="stat-label">نسبة الإنجاز</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-calendar-day"></i></div>
+                            <div id="todayCount" class="stat-number">0</div>
+                            <div class="stat-label">مهام اليوم</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-forward"></i></div>
+                            <div id="upcomingCount" class="stat-number">0</div>
+                            <div class="stat-label">مهام قادمة</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-bug"></i></div>
+                            <div id="openProblemsCount" class="stat-number">0</div>
+                            <div class="stat-label">مشاكل مفتوحة</div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-layout">
+                        <div class="progress-block">
+                            <div class="progress-item">
+                                <div class="progress-top">
+                                    <span><i class="fas fa-circle-check"></i> إنجاز المهام</span>
+                                    <span id="progressLabel">0%</span>
+                                </div>
+                                <div class="bar"><span id="progressBar"></span></div>
+                            </div>
+
+                            <div class="progress-item">
+                                <div class="progress-top">
+                                    <span><i class="fas fa-triangle-exclamation"></i> المتأخر من المهام</span>
+                                    <span id="overdueLabel">0%</span>
+                                </div>
+                                <div class="bar"><span id="overdueBar" style="background:linear-gradient(135deg,#b42318,#ef665c);"></span></div>
+                            </div>
+
+                            <div class="progress-item">
+                                <div class="progress-top">
+                                    <span><i class="fas fa-tools"></i> حل المشاكل</span>
+                                    <span id="problemsSolvedLabel">0%</span>
+                                </div>
+                                <div class="bar"><span id="problemsSolvedBar" style="background:linear-gradient(135deg,#067647,#22c55e);"></span></div>
+                            </div>
+                        </div>
+
+                        <div class="info-box">
+                            <h4><i class="fas fa-clipboard-list"></i> ملخص سريع</h4>
+                            <p id="analyticsSummary">لا توجد بيانات كافية حتى الآن.</p>
+                            <div style="height:14px;"></div>
+                            <button class="btn btn-primary go-page" data-page="tasks"><i class="fas fa-list-check"></i> الذهاب للمهام</button>
+                            <button class="btn btn-danger go-page" data-page="problems" style="margin-inline-start:6px;"><i class="fas fa-bug"></i> الذهاب للشكاوي</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Page -->
+            <section id="page-settings" class="page-section">
+                <div class="glass-card">
+                    <div class="section-head">
+                        <div>
+                            <div class="section-title"><i class="fas fa-gear"></i> الإعدادات</div>
+                            <p class="section-desc">تحكم في القفل، الرقم السري، وتصدير نسخة من البيانات.</p>
+                        </div>
+                        <button class="btn btn-soft go-page" data-page="home"><i class="fas fa-arrow-right"></i> رجوع للرئيسية</button>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3><i class="fas fa-lock"></i> وضع التعديل</h3>
+                            <p>افتح وضع التعديل عشان تقدر تضيف أو تعدل أو تحذف المهام والملاحظات والشكاوي.</p>
+                            <div class="settings-actions">
+                                <button id="unlockBtn2" class="btn btn-primary"><i class="fas fa-unlock"></i> فتح التعديل</button>
+                                <button id="lockBtn2" class="btn btn-soft"><i class="fas fa-lock"></i> قفل الصفحة</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3><i class="fas fa-key"></i> الرقم السري</h3>
+                            <p>الرقم الافتراضي أول مرة هو 1234. تقدر تغيره بعد فتح وضع التعديل.</p>
+                            <div class="settings-actions">
+                                <button id="changePinBtn" class="btn btn-gold"><i class="fas fa-rotate"></i> تغيير الرقم السري</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3><i class="fas fa-file-export"></i> تصدير البيانات</h3>
+                            <p>ينزّل ملف JSON فيه المهام والملاحظات والشكاوي الموجودة حالياً.</p>
+                            <div class="settings-actions">
+                                <button id="exportBtn" class="btn btn-green"><i class="fas fa-download"></i> تصدير JSON</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3><i class="fas fa-circle-info"></i> معلومات</h3>
+                            <p>هذه الصفحة Single HTML App وتستخدم Firebase Firestore بنفس collections الموجودة في كودك.</p>
+                            <div class="settings-actions">
+                                <button class="btn btn-soft go-page" data-page="notes"><i class="fas fa-note-sticky"></i> ملاحظات</button>
+                                <button class="btn btn-soft go-page" data-page="analytics"><i class="fas fa-chart-line"></i> إحصائيات</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script type="module">
+        // ------------------------- Firebase Config -------------------------
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            addDoc,
+            setDoc,
+            updateDoc,
+            deleteDoc,
+            onSnapshot,
+            query,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+        const appConfig = {
+            apiKey: "AIzaSyBpvS0a1zU8lVEqFCEAANosTsZxb4w7dY4",
+            authDomain: "webapp2025-d4540.firebaseapp.com",
+            projectId: "webapp2025-d4540",
+            storageBucket: "webapp2025-d4540.firebasestorage.app",
+            messagingSenderId: "799237931324",
+            appId: "1:799237931324:web:0af5391289221004ea9e39"
+        };
+
+        const app = initializeApp(appConfig);
+        const db = getFirestore(app);
+
+        const tasksCol = collection(db, "dailyTasks");
+        const notesDocRef = doc(db, "userNotes", "mainNote");
+        const problemsCol = collection(db, "problems");
+
+        // ------------------------- State -------------------------
+        let allTasks = [];
+        let allProblems = [];
+        let currentFilter = "all";
+        let editUnlocked = false;
+        let currentPage = "home";
+        let latestNotesContent = "";
+
+        const PIN_STORAGE_KEY = "tasks_app_pin_v2";
+
+        // ------------------------- Elements -------------------------
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const pageTitle = document.getElementById("pageTitle");
+
+        const navBtns = document.querySelectorAll(".nav-btn");
+        const goPageBtns = document.querySelectorAll(".go-page");
+        const pageSections = document.querySelectorAll(".page-section");
+
+        const modeBadge = document.getElementById("modeBadge");
+        const unlockBtn = document.getElementById("unlockBtn");
+        const lockBtn = document.getElementById("lockBtn");
+        const unlockBtn2 = document.getElementById("unlockBtn2");
+        const lockBtn2 = document.getElementById("lockBtn2");
+        const changePinBtn = document.getElementById("changePinBtn");
+        const exportBtn = document.getElementById("exportBtn");
+
+        const miniTotal = document.getElementById("miniTotal");
+        const miniDone = document.getElementById("miniDone");
+        const totalSpan = document.getElementById("totalCount");
+        const completedSpan = document.getElementById("completedCount");
+        const pendingSpan = document.getElementById("pendingCount");
+        const overdueSpan = document.getElementById("overdueCount");
+
+        const taskInput = document.getElementById("taskTitle");
+        const prioritySelect = document.getElementById("taskPriority");
+        const taskDateInput = document.getElementById("taskDate");
+        const taskTimeInput = document.getElementById("taskTime");
+        const addBtn = document.getElementById("addTaskBtn");
+        const tasksContainer = document.getElementById("tasksList");
+        const filterBtns = document.querySelectorAll(".filter-btn");
+
+        const notesArea = document.getElementById("notesContent");
+        const saveNotesBtn = document.getElementById("saveNotesBtn");
+        const saveNotesBtnTop = document.getElementById("saveNotesBtnTop");
+        const notesMsg = document.getElementById("notesMsg");
+
+        const problemInput = document.getElementById("problemInput");
+        const addProblemBtn = document.getElementById("addProblemBtn");
+        const problemsList = document.getElementById("problemsList");
+
+        const progressPercent = document.getElementById("progressPercent");
+        const todayCount = document.getElementById("todayCount");
+        const upcomingCount = document.getElementById("upcomingCount");
+        const openProblemsCount = document.getElementById("openProblemsCount");
+        const progressLabel = document.getElementById("progressLabel");
+        const progressBar = document.getElementById("progressBar");
+        const overdueLabel = document.getElementById("overdueLabel");
+        const overdueBar = document.getElementById("overdueBar");
+        const problemsSolvedLabel = document.getElementById("problemsSolvedLabel");
+        const problemsSolvedBar = document.getElementById("problemsSolvedBar");
+        const analyticsSummary = document.getElementById("analyticsSummary");
+
+        const toast = document.getElementById("toast");
+
+        // ------------------------- Helpers -------------------------
+        function showToast(message, type = "success") {
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => {
+                toast.className = "toast";
+            }, 2400);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return "";
+            return String(text).replace(/[&<>"']/g, function (m) {
+                const map = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                };
+                return map[m];
+            });
+        }
+
+        function getStoredPin() {
+            return localStorage.getItem(PIN_STORAGE_KEY) || "1234";
+        }
+
+        function setStoredPin(pin) {
+            localStorage.setItem(PIN_STORAGE_KEY, pin);
+        }
+
+        function requireEditAccess() {
+            if (editUnlocked) return true;
+            showToast("الصفحة في وضع العرض فقط. افتح التعديل بالرقم السري أولاً.", "warn");
+            return false;
+        }
+
+        function getTodayKey() {
+            const now = new Date();
+            const m = `${now.getMonth() + 1}`.padStart(2, "0");
+            const d = `${now.getDate()}`.padStart(2, "0");
+            return `${now.getFullYear()}-${m}-${d}`;
+        }
+
+        function showDate() {
+            const now = new Date();
+            const dateText = now.toLocaleDateString("ar-EG", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
+
+            document.querySelector("#currentDate span").innerText = dateText;
+        }
+
+        function formatDueLabel(task) {
+            if (!task.dueDate) return "بدون موعد";
+
+            const dateObj = new Date(`${task.dueDate}T00:00:00`);
+            const dateLabel = dateObj.toLocaleDateString("ar-EG", {
+                day: "numeric",
+                month: "short"
+            });
+
+            return task.dueTime ? `${dateLabel} - ${task.dueTime}` : dateLabel;
+        }
+
+        function getScheduleState(task) {
+            if (task.completed) return "completed";
+            if (!task.dueAt) return "upcoming";
+
+            const now = Date.now();
+
+            if (task.dueAt < now) return "overdue";
+            if (task.dueDate === getTodayKey()) return "today";
+
+            return "upcoming";
+        }
+
+        function percent(part, total) {
+            if (!total) return 0;
+            return Math.round((part / total) * 100);
+        }
+
+        // ------------------------- Navigation -------------------------
+        const titles = {
+            home: "الرئيسية",
+            tasks: "المهام اليومية",
+            notes: "الملاحظات",
+            problems: "الشكاوي والمشاكل",
+            analytics: "الإحصائيات",
+            settings: "الإعدادات"
+        };
+
+        function openPage(page) {
+            currentPage = page;
+            pageTitle.textContent = titles[page] || "الرئيسية";
+
+            pageSections.forEach((section) => {
+                section.classList.toggle("active", section.id === `page-${page}`);
+            });
+
+            navBtns.forEach((btn) => {
+                btn.classList.toggle("active", btn.dataset.page === page);
+            });
+
+            closeSidebar();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function openSidebar() {
+            sidebar.classList.add("show");
+            overlay.classList.add("show");
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("show");
+            overlay.classList.remove("show");
+        }
+
+        navBtns.forEach((btn) => {
+            btn.addEventListener("click", () => openPage(btn.dataset.page));
+        });
+
+        goPageBtns.forEach((btn) => {
+            btn.addEventListener("click", () => openPage(btn.dataset.page));
+        });
+
+        mobileMenuBtn.addEventListener("click", openSidebar);
+        overlay.addEventListener("click", closeSidebar);
+
+        // ------------------------- Lock / Unlock -------------------------
+        function applyReadOnlyMode() {
+            const controls = [
+                taskInput,
+                prioritySelect,
+                taskDateInput,
+                taskTimeInput,
+                addBtn,
+                notesArea,
+                saveNotesBtn,
+                saveNotesBtnTop,
+                problemInput,
+                addProblemBtn
+            ];
+
+            controls.forEach((el) => {
+                if (el) el.disabled = !editUnlocked;
+            });
+
+            modeBadge.classList.toggle("edit", editUnlocked);
+
+            modeBadge.innerHTML = editUnlocked
+                ? '<i class="fas fa-unlock"></i> وضع التعديل مفعل'
+                : '<i class="fas fa-lock"></i> وضع العرض فقط';
+
+            renderTasks();
+            renderProblems();
+        }
+
+        function unlockEditing() {
+            const inputPin = prompt("ادخل الرقم السري لفتح التعديل:");
+            if (!inputPin) return;
+
+            if (inputPin === getStoredPin()) {
+                editUnlocked = true;
+                applyReadOnlyMode();
+                showToast("تم فتح وضع التعديل بنجاح", "success");
+            } else {
+                showToast("الرقم السري غير صحيح", "error");
+            }
+        }
+
+        function lockEditing() {
+            editUnlocked = false;
+            applyReadOnlyMode();
+            showToast("تم قفل الصفحة", "success");
+        }
+
+        function changePin() {
+            if (!editUnlocked) {
+                showToast("افتح وضع التعديل أولاً لتغيير الرقم السري.", "warn");
+                return;
+            }
+
+            const current = prompt("ادخل الرقم السري الحالي:");
+            if (current !== getStoredPin()) {
+                showToast("الرقم الحالي غير صحيح", "error");
+                return;
+            }
+
+            const nextPin = prompt("ادخل رقم سري جديد، 4 أرقام على الأقل:");
+            if (!nextPin || nextPin.length < 4) {
+                showToast("الرقم الجديد غير صالح", "error");
+                return;
+            }
+
+            setStoredPin(nextPin);
+            showToast("تم تغيير الرقم السري", "success");
+        }
+
+        unlockBtn.addEventListener("click", unlockEditing);
+        lockBtn.addEventListener("click", lockEditing);
+        unlockBtn2.addEventListener("click", unlockEditing);
+        lockBtn2.addEventListener("click", lockEditing);
+        changePinBtn.addEventListener("click", changePin);
+
+        // ------------------------- Tasks -------------------------
+        function updateStats() {
+            const total = allTasks.length;
+            const completed = allTasks.filter((t) => t.completed).length;
+            const overdue = allTasks.filter((t) => getScheduleState(t) === "overdue").length;
+            const today = allTasks.filter((t) => !t.completed && t.dueDate === getTodayKey()).length;
+            const upcoming = allTasks.filter((t) => !t.completed && getScheduleState(t) === "upcoming").length;
+
+            const solvedProblems = allProblems.filter((p) => p.solved).length;
+            const openProblems = allProblems.filter((p) => !p.solved).length;
+
+            miniTotal.innerText = total;
+            miniDone.innerText = completed;
+
+            totalSpan.innerText = total;
+            completedSpan.innerText = completed;
+            pendingSpan.innerText = total - completed;
+            overdueSpan.innerText = overdue;
+
+            const donePercent = percent(completed, total);
+            const overduePercent = percent(overdue, total);
+            const solvedProblemsPercent = percent(solvedProblems, allProblems.length);
+
+            progressPercent.innerText = `${donePercent}%`;
+            todayCount.innerText = today;
+            upcomingCount.innerText = upcoming;
+            openProblemsCount.innerText = openProblems;
+
+            progressLabel.innerText = `${donePercent}%`;
+            progressBar.style.width = `${donePercent}%`;
+
+            overdueLabel.innerText = `${overduePercent}%`;
+            overdueBar.style.width = `${overduePercent}%`;
+
+            problemsSolvedLabel.innerText = `${solvedProblemsPercent}%`;
+            problemsSolvedBar.style.width = `${solvedProblemsPercent}%`;
+
+            analyticsSummary.innerText =
+                total === 0 && allProblems.length === 0
+                    ? "لا توجد بيانات كافية حتى الآن. ابدأ بإضافة مهام أو مشاكل من الصفحات."
+                    : `عندك ${total} مهمة، المنجز ${completed}، المتأخر ${overdue}، ومشاكل مفتوحة ${openProblems}.`;
+        }
+
+        function renderTasks() {
+            let filtered = [...allTasks];
+
+            if (currentFilter === "completed") filtered = filtered.filter((t) => t.completed);
+            if (currentFilter === "pending") filtered = filtered.filter((t) => !t.completed);
+            if (currentFilter === "today") filtered = filtered.filter((t) => !t.completed && t.dueDate === getTodayKey());
+            if (currentFilter === "upcoming") filtered = filtered.filter((t) => !t.completed && getScheduleState(t) === "upcoming");
+            if (currentFilter === "overdue") filtered = filtered.filter((t) => !t.completed && getScheduleState(t) === "overdue");
+
+            filtered.sort((a, b) => {
+                if (a.completed !== b.completed) return a.completed ? 1 : -1;
+
+                const aDue = a.dueAt || Number.MAX_SAFE_INTEGER;
+                const bDue = b.dueAt || Number.MAX_SAFE_INTEGER;
+
+                if (aDue !== bDue) return aDue - bDue;
+
+                return (b.createdAt || 0) - (a.createdAt || 0);
+            });
+
+            if (filtered.length === 0) {
+                const labels = {
+                    all: "",
+                    completed: "مكتملة",
+                    pending: "غير مكتملة",
+                    today: "لليوم",
+                    upcoming: "قادمة",
+                    overdue: "متأخرة"
+                };
+
+                tasksContainer.innerHTML = `
+                    <li class="empty-message">
+                        <i class="far fa-smile"></i>
+                        لا توجد مهام ${labels[currentFilter] || ""}
+                    </li>
+                `;
+                return;
+            }
+
+            tasksContainer.innerHTML = "";
+
+            filtered.forEach((task) => {
+                const li = document.createElement("li");
+
+                const priorityClass =
+                    task.priority === "عالية"
+                        ? "priority-high"
+                        : task.priority === "متوسطة"
+                            ? "priority-medium"
+                            : "priority-low";
+
+                const tagClass =
+                    task.priority === "عالية"
+                        ? "tag-high"
+                        : task.priority === "متوسطة"
+                            ? "tag-medium"
+                            : "tag-low";
+
+                const priorityText =
+                    task.priority === "عالية"
+                        ? "🔴 عالية"
+                        : task.priority === "متوسطة"
+                            ? "🟠 متوسطة"
+                            : "🟢 منخفضة";
+
+                const scheduleState = getScheduleState(task);
+
+                const statusMap = {
+                    completed: { text: "خلصت", cls: "status-upcoming" },
+                    overdue: { text: "متأخرة", cls: "status-overdue" },
+                    today: { text: "اليوم", cls: "status-today" },
+                    upcoming: { text: "لسه", cls: "status-upcoming" }
+                };
+
+                const statusInfo = statusMap[scheduleState];
+
+                li.className = `task-item ${priorityClass} ${task.completed ? "completed" : ""}`;
+
+                li.innerHTML = `
+                    <div class="task-content">
+                        <input type="checkbox" class="task-check" data-id="${task.id}" ${task.completed ? "checked" : ""} ${editUnlocked ? "" : "disabled"} />
+                        <div class="task-main">
+                            <span class="task-text">${escapeHtml(task.title)}</span>
+                            <div class="task-meta">
+                                <span class="tag ${tagClass}">${priorityText}</span>
+                                <span class="tag tag-date"><i class="far fa-clock"></i> ${formatDueLabel(task)}</span>
+                                <span class="tag ${statusInfo.cls}">${statusInfo.text}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-actions">
+                        <button class="icon-btn edit-btn" data-id="${task.id}" ${editUnlocked ? "" : "disabled"} title="تعديل">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn danger delete-btn" data-id="${task.id}" ${editUnlocked ? "" : "disabled"} title="حذف">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+
+                tasksContainer.appendChild(li);
+            });
+
+            document.querySelectorAll(".task-check").forEach((cb) => {
+                cb.addEventListener("change", () => toggleComplete(cb.dataset.id, cb.checked));
+            });
+
+            document.querySelectorAll(".edit-btn").forEach((btn) => {
+                btn.addEventListener("click", () => editTask(btn.dataset.id));
+            });
+
+            document.querySelectorAll(".delete-btn").forEach((btn) => {
+                btn.addEventListener("click", () => deleteTask(btn.dataset.id));
+            });
+        }
+
+        async function toggleComplete(taskId, isCompleted) {
+            if (!requireEditAccess()) {
+                renderTasks();
+                return;
+            }
+
+            try {
+                await updateDoc(doc(db, "dailyTasks", taskId), {
+                    completed: isCompleted
+                });
+
+                showToast(isCompleted ? "تم إنجاز المهمة" : "تم إرجاع المهمة", "success");
+            } catch (e) {
+                showToast("فشل تحديث المهمة، تأكد من الاتصال", "error");
+            }
+        }
+
+        async function editTask(taskId) {
+            if (!requireEditAccess()) return;
+
+            const task = allTasks.find((t) => t.id === taskId);
+            if (!task) return;
+
+            const newTitle = prompt("تعديل المهمة:", task.title);
+            if (!newTitle || !newTitle.trim()) return;
+
+            const newPriority = prompt("تعديل الأولوية: عالية / متوسطة / منخفضة", task.priority);
+
+            let finalPriority = task.priority;
+            if (["عالية", "متوسطة", "منخفضة"].includes(newPriority)) {
+                finalPriority = newPriority;
+            }
+
+            const newDate = prompt("تعديل التاريخ بصيغة YYYY-MM-DD:", task.dueDate || getTodayKey());
+            const newTime = prompt("تعديل الوقت بصيغة HH:MM:", task.dueTime || "09:00");
+
+            const finalDate = newDate && /^\d{4}-\d{2}-\d{2}$/.test(newDate)
+                ? newDate
+                : task.dueDate || getTodayKey();
+
+            const finalTime = newTime && /^\d{2}:\d{2}$/.test(newTime)
+                ? newTime
+                : task.dueTime || "09:00";
+
+            const dueAt = new Date(`${finalDate}T${finalTime}:00`).getTime();
+
+            try {
+                await updateDoc(doc(db, "dailyTasks", taskId), {
+                    title: newTitle.trim(),
+                    priority: finalPriority,
+                    dueDate: finalDate,
+                    dueTime: finalTime,
+                    dueAt
+                });
+
+                showToast("تم تعديل المهمة", "success");
+            } catch (e) {
+                showToast("فشل تعديل المهمة", "error");
+            }
+        }
+
+        async function deleteTask(taskId) {
+            if (!requireEditAccess()) return;
+
+            if (!confirm("هل أنت متأكد من حذف هذه المهمة؟")) return;
+
+            try {
+                await deleteDoc(doc(db, "dailyTasks", taskId));
+                showToast("تم حذف المهمة", "success");
+            } catch (e) {
+                showToast("فشل حذف المهمة", "error");
+            }
+        }
+
+        async function addTask() {
+            if (!requireEditAccess()) return;
+
+            const title = taskInput.value.trim();
+
+            if (!title) {
+                showToast("اكتب اسم المهمة أولاً", "warn");
+                return;
+            }
+
+            const priority = prioritySelect.value;
+            const dueDate = taskDateInput.value || getTodayKey();
+            const dueTime = taskTimeInput.value || "09:00";
+            const dueAt = new Date(`${dueDate}T${dueTime}:00`).getTime();
+
+            try {
+                await addDoc(tasksCol, {
+                    title,
+                    priority,
+                    completed: false,
+                    dueDate,
+                    dueTime,
+                    dueAt,
+                    createdAt: Date.now()
+                });
+
+                taskInput.value = "";
+                prioritySelect.value = "متوسطة";
+                taskTimeInput.value = "09:00";
+
+                showToast("تمت إضافة المهمة", "success");
+            } catch (e) {
+                showToast("فشل إضافة المهمة، تأكد من الاتصال", "error");
+            }
+        }
+
+        function listenTasks() {
+            const tasksQuery = query(tasksCol, orderBy("createdAt", "desc"));
+
+            onSnapshot(tasksQuery, (snapshot) => {
+                allTasks = snapshot.docs.map((d) => {
+                    const data = d.data() || {};
+
+                    return {
+                        id: d.id,
+                        title: data.title || "مهمة",
+                        priority: data.priority || "متوسطة",
+                        completed: data.completed === true,
+                        dueDate: data.dueDate || "",
+                        dueTime: data.dueTime || "",
+                        dueAt: typeof data.dueAt === "number" ? data.dueAt : 0,
+                        createdAt: data.createdAt || Date.now()
+                    };
+                });
+
+                updateStats();
+                renderTasks();
+            });
+        }
+
+        function setupFilters() {
+            filterBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const filter = btn.dataset.filter;
+
+                    if (!filter) return;
+
+                    currentFilter = filter;
+
+                    filterBtns.forEach((b) => b.classList.remove("active"));
+                    btn.classList.add("active");
+
+                    renderTasks();
+                });
+            });
+        }
+
+        addBtn.addEventListener("click", addTask);
+
+        taskInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") addTask();
+        });
+
+        // ------------------------- Notes -------------------------
+        function loadNotes() {
+            onSnapshot(notesDocRef, (snapshot) => {
+                const data = snapshot.data();
+                const savedNote = data && typeof data.content === "string" ? data.content : "";
+
+                latestNotesContent = savedNote;
+                notesArea.value = savedNote;
+            });
+        }
+
+        async function saveNotes() {
+            if (!requireEditAccess()) return;
+
+            const content = notesArea.value;
+
+            if (content.length > 6000) {
+                notesMsg.innerText = "الملاحظة طويلة جداً، حد 6000 حرف";
+                showToast("الملاحظة طويلة جداً", "warn");
+                return;
+            }
+
+            try {
+                await setDoc(notesDocRef, { content }, { merge: true });
+
+                latestNotesContent = content;
+                notesMsg.innerText = "تم حفظ الملاحظات في السحابة";
+                showToast("تم حفظ الملاحظات", "success");
+
+                setTimeout(() => {
+                    notesMsg.innerText = "";
+                }, 2200);
+            } catch (e) {
+                notesMsg.innerText = "فشل الحفظ، تأكد من الاتصال";
+                showToast("فشل حفظ الملاحظات", "error");
+            }
+        }
+
+        saveNotesBtn.addEventListener("click", saveNotes);
+        saveNotesBtnTop.addEventListener("click", saveNotes);
+
+        document.addEventListener("keydown", (e) => {
+            const isSaveShortcut = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s";
+
+            if (isSaveShortcut && currentPage === "notes") {
+                e.preventDefault();
+                saveNotes();
+            }
+        });
+
+        // ------------------------- Problems -------------------------
+        function renderProblems() {
+            problemsList.innerHTML = "";
+
+            if (allProblems.length === 0) {
+                problemsList.innerHTML = `
+                    <li class="empty-message" style="padding:22px;">
+                        لا توجد مشاكل حالياً
+                    </li>
+                `;
+                return;
+            }
+
+            allProblems.forEach((p) => {
+                const li = document.createElement("li");
+
+                li.className = `problem-row ${p.solved ? "solved" : ""}`;
+
+                li.innerHTML = `
+                    <input type="checkbox" data-id="${p.id}" ${p.solved ? "checked" : ""} ${editUnlocked ? "" : "disabled"} />
+                    <span class="problem-text ${p.solved ? "solved" : ""}">${escapeHtml(p.text)}</span>
+                    <button class="icon-btn danger delete-problem-btn" data-id="${p.id}" ${editUnlocked ? "" : "disabled"} title="حذف">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+
+                problemsList.appendChild(li);
+            });
+
+            problemsList.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+                cb.addEventListener("change", async () => {
+                    if (!requireEditAccess()) {
+                        renderProblems();
+                        return;
+                    }
+
+                    try {
+                        await updateDoc(doc(db, "problems", cb.dataset.id), {
+                            solved: cb.checked
+                        });
+
+                        showToast(cb.checked ? "تم حل المشكلة" : "تم فتح المشكلة مرة أخرى", "success");
+                    } catch (e) {
+                        showToast("فشل تحديث المشكلة", "error");
+                    }
+                });
+            });
+
+            problemsList.querySelectorAll(".delete-problem-btn").forEach((btn) => {
+                btn.addEventListener("click", async () => {
+                    if (!requireEditAccess()) return;
+
+                    if (!confirm("حذف المشكلة؟")) return;
+
+                    try {
+                        await deleteDoc(doc(db, "problems", btn.dataset.id));
+                        showToast("تم حذف المشكلة", "success");
+                    } catch (e) {
+                        showToast("فشل حذف المشكلة", "error");
+                    }
+                });
+            });
+        }
+
+        async function addProblem() {
+            if (!requireEditAccess()) return;
+
+            const text = problemInput.value.trim();
+            if (!text) {
+                showToast("اكتب المشكلة أولاً", "warn");
+                return;
+            }
+
+            try {
+                await addDoc(problemsCol, {
+                    text,
+                    solved: false,
+                    createdAt: Date.now()
+                });
+
+                problemInput.value = "";
+                showToast("تمت إضافة المشكلة", "success");
+            } catch (e) {
+                showToast("فشل إضافة المشكلة", "error");
+            }
+        }
+
+        function listenProblems() {
+            const problemsQuery = query(problemsCol, orderBy("createdAt", "desc"));
+
+            onSnapshot(problemsQuery, (snapshot) => {
+                allProblems = snapshot.docs.map((d) => {
+                    const data = d.data() || {};
+
+                    return {
+                        id: d.id,
+                        text: data.text || "مشكلة",
+                        solved: data.solved === true,
+                        createdAt: data.createdAt || 0
+                    };
+                });
+
+                updateStats();
+                renderProblems();
+            });
+        }
+
+        addProblemBtn.addEventListener("click", addProblem);
+
+        problemInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") addProblem();
+        });
+
+        // ------------------------- Export -------------------------
+        function exportData() {
+            const data = {
+                exportedAt: new Date().toISOString(),
+                tasks: allTasks,
+                notes: latestNotesContent,
+                problems: allProblems
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], {
+                type: "application/json"
+            });
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+
+            a.href = url;
+            a.download = `daily-dashboard-${getTodayKey()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            URL.revokeObjectURL(url);
+            showToast("تم تصدير البيانات", "success");
+        }
+
+        exportBtn.addEventListener("click", exportData);
+
+        // ------------------------- Init -------------------------
+        showDate();
+        taskDateInput.value = getTodayKey();
+
+        setupFilters();
+        applyReadOnlyMode();
+
+        listenTasks();
+        loadNotes();
+        listenProblems();
+    </script>
+</body>
+</html>
