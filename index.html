@@ -1142,6 +1142,166 @@
             display: block;
         }
 
+
+        /* ------------------------- Public Complaint Form Link ------------------------- */
+        .public-complaint-page {
+            display: none;
+            min-height: 100vh;
+            padding: 22px;
+            place-items: center;
+        }
+
+        body.complaint-mode .app-shell,
+        body.complaint-mode .overlay {
+            display: none !important;
+        }
+
+        body.complaint-mode .public-complaint-page {
+            display: grid;
+        }
+
+        .public-form-card {
+            width: min(720px, 100%);
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(255,255,255,0.88);
+            border-radius: 34px;
+            padding: 26px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .public-form-card::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(180,35,24,0.09);
+            left: -90px;
+            top: -90px;
+        }
+
+        .public-form-icon {
+            position: relative;
+            width: 66px;
+            height: 66px;
+            border-radius: 24px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--red), #ef665c);
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 16px 32px rgba(180,35,24,0.22);
+            margin-bottom: 16px;
+        }
+
+        .public-form-card h1 {
+            position: relative;
+            font-size: clamp(28px, 4vw, 44px);
+            line-height: 1.15;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .public-form-card p {
+            position: relative;
+            color: var(--muted);
+            line-height: 1.8;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .public-form-grid {
+            position: relative;
+            display: grid;
+            gap: 12px;
+        }
+
+        .public-input {
+            width: 100%;
+            border: 1px solid rgba(36,93,134,0.16);
+            background: #fbfdff;
+            color: var(--text);
+            border-radius: 18px;
+            outline: none;
+            transition: 0.2s ease;
+            font-weight: 800;
+            min-height: 52px;
+            padding: 0 16px;
+            font-size: 15px;
+        }
+
+        .public-textarea {
+            min-height: 170px;
+            padding: 16px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .public-input:focus {
+            border-color: rgba(31,135,184,0.65);
+            box-shadow: 0 0 0 4px rgba(31,135,184,0.10);
+            background: #ffffff;
+        }
+
+        .public-msg {
+            min-height: 24px;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--muted);
+        }
+
+        .public-msg.success {
+            color: var(--green);
+        }
+
+        .public-msg.error {
+            color: var(--red);
+        }
+
+        .complaint-link-box {
+            background: linear-gradient(135deg, rgba(255,240,240,0.92), rgba(255,255,255,0.92));
+            border: 1px solid rgba(180,35,24,0.12);
+            border-radius: 24px;
+            padding: 14px;
+            display: grid;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .complaint-link-box strong {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--red);
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .complaint-link-row {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) auto;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .complaint-link-row input {
+            min-height: 45px;
+            border: 1px solid rgba(36,93,134,0.16);
+            background: white;
+            border-radius: 16px;
+            padding: 0 13px;
+            color: var(--muted);
+            direction: ltr;
+            text-align: left;
+            font-weight: 800;
+        }
+
+        .problem-text {
+            white-space: pre-line;
+        }
+
         @media (max-width: 1180px) {
             .app-shell {
                 grid-template-columns: 1fr;
@@ -1249,6 +1409,29 @@
 
 <body>
     <div id="overlay" class="overlay"></div>
+
+
+    <section id="publicComplaintPage" class="public-complaint-page" aria-hidden="true">
+        <div class="public-form-card">
+            <div class="public-form-icon"><i class="fas fa-triangle-exclamation"></i></div>
+            <h1>إرسال شكوى أو مشكلة</h1>
+            <p>
+                اكتب الشكوى أو المشكلة هنا، وسيتم إرسالها مباشرة إلى لوحة الشكاوي.
+                لا تحتاج رقم سري ولا دخول للوحة.
+            </p>
+
+            <div class="public-form-grid">
+                <input type="text" id="publicProblemName" class="public-input" placeholder="اسمك اختياري" />
+                <input type="text" id="publicProblemContact" class="public-input" placeholder="رقم الجوال أو وسيلة التواصل اختياري" />
+                <textarea id="publicProblemText" class="public-input public-textarea" placeholder="اكتب الشكوى أو المشكلة بالتفصيل..."></textarea>
+                <button id="sendPublicProblemBtn" class="btn btn-danger" style="width:100%;">
+                    <i class="fas fa-paper-plane"></i>
+                    إرسال الشكوى
+                </button>
+                <div id="publicProblemMsg" class="public-msg"></div>
+            </div>
+        </div>
+    </section>
 
     <div class="app-shell">
         <!-- Sidebar -->
@@ -1500,7 +1683,19 @@
                             <div class="section-title"><i class="fas fa-triangle-exclamation"></i> الشكاوي والمشاكل</div>
                             <p class="section-desc">سجل أي مشكلة، وبعد الحل علم عليها كمحلولة أو احذفها من القائمة.</p>
                         </div>
-                        <button class="btn btn-soft go-page" data-page="home"><i class="fas fa-arrow-right"></i> رجوع للرئيسية</button>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+                            <button id="copyComplaintLinkBtn" class="btn btn-danger"><i class="fas fa-link"></i> نسخ لينك الفورم</button>
+                            <button id="openComplaintFormBtn" class="btn btn-primary"><i class="fas fa-up-right-from-square"></i> فتح الفورم</button>
+                            <button class="btn btn-soft go-page" data-page="home"><i class="fas fa-arrow-right"></i> رجوع للرئيسية</button>
+                        </div>
+                    </div>
+
+                    <div class="complaint-link-box">
+                        <strong><i class="fas fa-link"></i> لينك فورم الشكاوي العام</strong>
+                        <div class="complaint-link-row">
+                            <input type="text" id="complaintPublicLink" readonly />
+                            <button id="copyComplaintLinkBtn2" class="btn btn-danger"><i class="fas fa-copy"></i> نسخ</button>
+                        </div>
                     </div>
 
                     <div class="task-form" style="background:#fffafa;">
@@ -1727,6 +1922,17 @@
         const problemInput = document.getElementById("problemInput");
         const addProblemBtn = document.getElementById("addProblemBtn");
         const problemsList = document.getElementById("problemsList");
+        const complaintPublicLink = document.getElementById("complaintPublicLink");
+        const copyComplaintLinkBtn = document.getElementById("copyComplaintLinkBtn");
+        const copyComplaintLinkBtn2 = document.getElementById("copyComplaintLinkBtn2");
+        const openComplaintFormBtn = document.getElementById("openComplaintFormBtn");
+
+        const publicComplaintPage = document.getElementById("publicComplaintPage");
+        const publicProblemName = document.getElementById("publicProblemName");
+        const publicProblemContact = document.getElementById("publicProblemContact");
+        const publicProblemText = document.getElementById("publicProblemText");
+        const sendPublicProblemBtn = document.getElementById("sendPublicProblemBtn");
+        const publicProblemMsg = document.getElementById("publicProblemMsg");
 
         const progressPercent = document.getElementById("progressPercent");
         const todayCount = document.getElementById("todayCount");
@@ -1764,6 +1970,72 @@
                 };
                 return map[m];
             });
+        }
+
+        function getComplaintFormUrl() {
+            const url = new URL(window.location.href);
+            url.searchParams.set("form", "complaint");
+            url.hash = "";
+            return url.toString();
+        }
+
+        function isComplaintFormMode() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("form") === "complaint" || window.location.hash === "#complaint-form";
+        }
+
+        function syncComplaintLinkInput() {
+            if (complaintPublicLink) {
+                complaintPublicLink.value = getComplaintFormUrl();
+            }
+        }
+
+        async function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+                return;
+            }
+
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            textarea.style.pointerEvents = "none";
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            document.execCommand("copy");
+            textarea.remove();
+        }
+
+        async function copyComplaintFormLink() {
+            const link = getComplaintFormUrl();
+            try {
+                await copyText(link);
+                showToast("تم نسخ لينك فورم الشكاوي", "success");
+            } catch (e) {
+                showToast("لم يتم النسخ، انسخ الرابط من المربع", "error");
+            }
+        }
+
+        function openComplaintFormLink() {
+            window.open(getComplaintFormUrl(), "_blank");
+        }
+
+        function applyComplaintFormMode() {
+            if (!isComplaintFormMode()) return;
+
+            document.body.classList.add("complaint-mode");
+            document.title = "إرسال شكوى أو مشكلة";
+            if (publicComplaintPage) {
+                publicComplaintPage.setAttribute("aria-hidden", "false");
+            }
+        }
+
+        function setPublicProblemMsg(message, type = "") {
+            if (!publicProblemMsg) return;
+            publicProblemMsg.textContent = message;
+            publicProblemMsg.className = `public-msg ${type}`;
         }
 
         function getStoredPin() {
@@ -2382,6 +2654,53 @@
             });
         }
 
+        async function sendPublicProblem() {
+            const problemText = publicProblemText ? publicProblemText.value.trim() : "";
+            const reporterName = publicProblemName ? publicProblemName.value.trim() : "";
+            const reporterContact = publicProblemContact ? publicProblemContact.value.trim() : "";
+
+            if (!problemText) {
+                setPublicProblemMsg("اكتب الشكوى أو المشكلة أولاً.", "error");
+                return;
+            }
+
+            if (sendPublicProblemBtn) {
+                sendPublicProblemBtn.disabled = true;
+                sendPublicProblemBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> جاري الإرسال...';
+            }
+
+            const visibleText = [
+                problemText,
+                reporterName ? `الاسم: ${reporterName}` : "",
+                reporterContact ? `التواصل: ${reporterContact}` : ""
+            ].filter(Boolean).join("\n");
+
+            try {
+                await addDoc(problemsCol, {
+                    text: visibleText,
+                    originalText: problemText,
+                    reporterName,
+                    reporterContact,
+                    source: "public_complaint_form",
+                    solved: false,
+                    createdAt: Date.now()
+                });
+
+                if (publicProblemText) publicProblemText.value = "";
+                if (publicProblemName) publicProblemName.value = "";
+                if (publicProblemContact) publicProblemContact.value = "";
+
+                setPublicProblemMsg("تم إرسال الشكوى بنجاح. شكراً لك.", "success");
+            } catch (e) {
+                setPublicProblemMsg("فشل إرسال الشكوى، تأكد من الاتصال وحاول مرة ثانية.", "error");
+            } finally {
+                if (sendPublicProblemBtn) {
+                    sendPublicProblemBtn.disabled = false;
+                    sendPublicProblemBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الشكوى';
+                }
+            }
+        }
+
         async function addProblem() {
             if (!requireEditAccess()) return;
 
@@ -2431,6 +2750,22 @@
             if (e.key === "Enter") addProblem();
         });
 
+        copyComplaintLinkBtn.addEventListener("click", copyComplaintFormLink);
+        copyComplaintLinkBtn2.addEventListener("click", copyComplaintFormLink);
+        openComplaintFormBtn.addEventListener("click", openComplaintFormLink);
+
+        complaintPublicLink.addEventListener("click", () => {
+            complaintPublicLink.select();
+        });
+
+        sendPublicProblemBtn.addEventListener("click", sendPublicProblem);
+
+        publicProblemText.addEventListener("keydown", (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                sendPublicProblem();
+            }
+        });
+
         // ------------------------- Export -------------------------
         function exportData() {
             const data = {
@@ -2460,6 +2795,9 @@
         exportBtn.addEventListener("click", exportData);
 
         // ------------------------- Init -------------------------
+        syncComplaintLinkInput();
+        applyComplaintFormMode();
+
         showDate();
         taskDateInput.value = getTodayKey();
 
